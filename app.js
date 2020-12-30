@@ -1,16 +1,18 @@
 const createError = require('http-errors');
 const express = require('express');
 const mongoose = require("mongoose")
-const bodyParser = require('body-parser');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require("cors")
 
 require("dotenv").config()
 
 const restRoutes = require("./routes/rest");
 
 const app = express();
+
+app.use(cors())
 
 // Database setup
 mongoose.Promise = global.Promise
@@ -29,7 +31,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
 
 app.use(`/api/v${process.env.API_VERSION}`, restRoutes);
 
